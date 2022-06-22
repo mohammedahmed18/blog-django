@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %} {{article.title}} {% endblock %}
+
+{% block 'content' %}
+{% load markdown_extras %}
+
+
+<div class="rounded-lg bg-base-300/50">
+
+    <img class="object-cover w-full md:h-[800px] lg:h-[600px] sm:h-full" src="/{{ article.cover }}" alt="{{ article.title }}" />
+
+
+
+    <h1 class="my-4 mb-10 text-6xl text-center">{{ article.title }}</h1>
+<div class="p-10">
+
+    <div class="flex flex-col justify-center">
+    <div class="avatar">
+        <div class="w-24 mask mask-hexagon">
+            <img src="/{{article.author.avatar}}" />
+        </div>
+    </div>
+    {%if article.author == user%}
+    <span class="ml-6 font-bold">@you</span>
+    {%else%}
+    <span class="ml-6 font-bold">@{{article.author}}</span>
+    {%endif%}
+</div>
+    
+    <div class="flex items-center my-2 mt-6 space-x-2">
+        <span class="badge badge-danger">date :</span>
+        <span class="font-bold">{{article.date_published}}</span>
+    </div>
+    <div class="my-4 divider"></div>
+    <div id="markdown">{{article.markdown | markdown | safe}}</div>
+</div>
+</div>
+
+{% endblock %}
+
+
+{% block 'scripts' %}
+<script type="text/javascript">
+
+    $(document).ready(() => {
+
+        $('#markdown a').addClass('link text-blue-500 ')
+        $('#markdown a').attr('target' , '_blank')
+        
+        $('#markdown h1').addClass('font-bold my-4 text-4xl')
+        $('#markdown h2').addClass('font-bold my-4 text-3xl')
+        // code
+        $('#markdown pre').addClass('p-4 bg-base-300 my-3 mx-2 rounded-md shadow-md')
+        // $('#markdown code').addClass('language-json')
+        
+        
+        $('#markdown h3').addClass('font-bold my-4 text-3xl')
+        $('#markdown h4').addClass('font-bold my-4 text-2xl')
+        $('#markdown h5').addClass('font-bold my-4 text-lg')
+        $('#markdown blockquote').addClass('border-l-2 p-3 bg-base-100')
+
+
+
+})
+</script>
+{% endblock %}

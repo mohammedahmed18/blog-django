@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %} create a new article {% endblock %}
+
+{% block 'content' %}
+<h1 class="my-2 text-3xl font-bold">Write a new article <i class="fa fa-pen"></i></h1>
+<div class="my-4 divider"></div>
+
+<div class="flex flex-col h-screen lg:flex-row">
+<form class="w-full p-4 overflow-auto lg:w-1/2" method="POST" action="{% url 'article_add'%}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ form.errors }}
+    <button type="submit" class="my-4 btn btn-secondary">Publish</button>
+    
+    <label class="my-2 input-group">
+        <span class="w-40 bg-base-200">title</span>
+        {{ form.title |add_class:"input bg-base-300 w-full input-bordered" |append_attr:"id:title"}}
+    </label>
+    
+
+    <label class="my-2 input-group">
+        <span class="w-40 bg-base-200">Cover</span>
+        {{ form.cover |add_class:"input bg-base-300 w-full input-bordered hidden" |append_attr:"id:cover"}}
+        <span class="block w-full p-3 bg-base-300">upload cover</span>
+    </label>
+
+    <label class="my-2 input-group">
+        <span class="w-40 bg-base-200">Markdown</span>
+        {{ form.markdown |add_class:"input bg-base-300 w-full input-bordered h-[400px]" |append_attr:"id:markdown"}}
+    </label>
+    
+
+
+</form>
+<!-- preview  -->
+<div class="w-full py-3 overflow-auto rounded-lg lg:w-1/2 bg-base-300/50">
+    <h1 class="text-2xl font-bold text-center">Preview</h1>
+    <div class="mt-2 mb-4 divider"></div>
+    {% load static %}
+<img src="{% static '/defaults/cover.jpg'%}" class="object-cover w-full md:h-[400px] lg:h-[300px] sm:h-full" alt="preview" id="preview-cover">
+<h1 class="my-4 mb-10 text-4xl text-center break-words" id="title-preview"></h1>
+<div id="markdown-preview" class="p-5"></div>
+</div>
+</div>
+
+{% endblock %}
+
+
+{% block 'scripts' %}
+<script src="{% static '/assets/js/showdown.js'%}"></script>
+
+<script>
+
+
+
+    // markdown init
+    var converter = new showdown.Converter()
+
+
+    const preview = $('#preview-cover')
+    $("#cover").on("change", function(e) {
+            var files = e.target.files;
+            var done = function(url) {
+                preview.attr('src', url)
+            };
+
+            var reader;
+            var file;
+            var url;
+
+            if (files && files.length > 0) {
+                file = files[0];
+                done(URL.createObjectURL(file));
+            }
+        });
+
+    $('#title').on('input' , (e) => {
+        $('#title-preview').text(e.target.value)
+    })
+
+    const putClasses = () => {
+
+$('#markdown-preview a').addClass('link text-blue-500 ')
+$('#markdown-preview a').attr('target' , '_blank')
+
+$('#markdown-preview h1').addClass('font-bold my-4 text-4xl')
+$('#markdown-preview h2').addClass('font-bold my-4 text-3xl')
+// code
+$('#markdown-preview pre').addClass('p-4 bg-base-300 my-3 mx-2 rounded-md shadow-md')
+
+
+$('#markdown-preview h3').addClass('font-bold my-4 text-3xl')
+$('#markdown-preview h4').addClass('font-bold my-4 text-2xl')
+$('#markdown-preview h5').addClass('font-bold my-4 text-lg')
+$('#markdown-preview blockquote').addClass('border-l-2 p-3 bg-base-100')
+
+}
+    $('#markdown').on('input' , (e) => {
+        const html = converter.makeHtml(e.target.value)
+        $('#markdown-preview').html(html)
+        putClasses()
+    })
+
+
+function reload(){
+    var container = document.getElementById("markdown-preview");
+    var content = container.innerHTML;
+    container.innerHTML= content; 
+}
+
+</script>
+{% endblock %}

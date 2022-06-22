@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% block 'content' %}
+
+<h1 class="text-3xl font-bold text-center">Recent blogs</h1>
+<div class="my-3 divider"></div>
+
+<div class="grid grid-cols-3 gap-3 sm:grid-cols-1">
+    <div class="my-2">
+        <h1>{{ article.title }}</h1>
+        
+    </div>
+</div>
+
+
+<div class="grid grid-cols-1 gap-3 p-4 mx-auto md:grid-cols-2 lg:grid-cols-3">
+
+  {% for a in articles.all %}
+
+    <a href="/articles/{{a}}" class="duration-300 ease-in-out shadow-md card card-compact bg-base-100 hover:shadow-xl">
+        <figure><img src="{{a.cover}}" alt="article cover" class="object-cover w-full h-80" /></figure>
+        <div class="bg-base-300 card-body">
+          <h2 class="card-title">{{a.title}}</h2>
+          <div class="justify-between card-actions">
+            <span>by : @{{a.author}}</span>
+            <span>{{a.date_published}}</span>
+          </div>
+   
+        </div>
+      </a>
+      {% endfor %}
+</div>
+
+{% endblock %}

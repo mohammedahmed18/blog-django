@@ -1,0 +1,39 @@
+{% load static tailwind_tags %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+	<head>
+    <title>{% block title %} blog {% endblock %}</title>
+	
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<!-- fontawesome -->
+		<link rel="stylesheet" href="{% static '/assets/css/all.min.css'%}" type="text/css"/>
+		<!-- dropify -->
+		<link rel="stylesheet" href="{% static '/assets/css/dropify.min.css'%}" type="text/css"/>
+
+		
+		{% tailwind_css %}
+
+	</head>
+
+	<body>
+		<!-- navbar -->
+		{% include "inc/navbar.html" %}
+		<!-- content -->
+		<div class="p-5 pt-20">
+			{% block 'content' %}
+			{% endblock %}
+		</div>
+
+		<script src="{% static '/assets/js/jquery.js'%}"></script>
+		<script src="{% static '/assets/js/all.min.js'%}"></script>
+		<script src="{% static '/assets/js/dropify.min.js'%}"></script>
+		
+		{% block 'scripts' %}
+		{% endblock %}
+
+	</body>
+</html>
