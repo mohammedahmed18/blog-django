@@ -69,6 +69,14 @@
 
   </div>
 
+
+{%if author_articles.count == 0 %}
+<div class="flex flex-col items-center justify-center h-80 bg-base-300/50">
+    <i class="mb-4 text-4xl fa-solid fa-face-sad-tear"></i>
+<p class="text-3xl font-bold">No articles yet</p>
+</div>
+{% else %}
+
   <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
     {% for a in author_articles.all %}
     <a href="/articles/{{a}}" class="duration-300 ease-in-out shadow-md card card-compact bg-base-100 hover:shadow-xl">
@@ -85,6 +93,11 @@
       </a>
       {% endfor %}
 </div>
+
+{% endif %}
+
+
+
 {% endblock %}
 {% block 'scripts' %}
 <script>

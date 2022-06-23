@@ -6,9 +6,6 @@ from authors.models import Author
 def get_cover_image_path(self, article=None):
     return f'static/articles/{self}/cover.png'
 
-class Comment(models.Model):
-    author = models.ForeignKey(Author , on_delete=models.CASCADE)
-    comment = models.TextField()
 
 
 class Article(models.Model):
@@ -18,7 +15,17 @@ class Article(models.Model):
     markdown = models.TextField()
     likes = models.IntegerField(default = 0)
     cover = models.ImageField(upload_to=get_cover_image_path)
-    comments = models.ForeignKey(Comment , on_delete=models.CASCADE , default=None , null=True)
     def __str__(self) -> str:
         return self.title.replace(' ' , '-')
 
+class Comment(models.Model):
+    author = models.ForeignKey(Author , on_delete=models.CASCADE)
+    comment = models.TextField(max_length=300)
+    article = models.ForeignKey(Article , on_delete=models.CASCADE , related_name='comments' ,default=None)
+    def get_avatar(self):
+        return self.author.avatar
+    def get_author(self):
+        return self.author
+
+    def __str__(self) -> str:
+        return self.comment
