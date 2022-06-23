@@ -7,7 +7,14 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 def article_page(req , title):
     article = Article.objects.get(title = title.replace('-' , ' '))
-    return render(req ,'articles/articlepage.html' , {'article' : article})
+    author = article.author
+    author_username = author.username.replace(' ' , '-')
+    context = {
+        'article' : article,
+        'author_username' : author_username,
+        'author' : author
+    }
+    return render(req ,'articles/articlepage.html' , context)
 
 @login_required()
 def add_article(req):

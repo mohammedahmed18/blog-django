@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block 'styles' %}
+<style>
+    .avatar-active{
+        transform: scale(2) translateY(5rem);
+        
+        border-radius : 0;
+    }
+</style>
+{% endblock %}
+{% block 'content' %}
+<div class="flex flex-col items-center mx-auto py-7">
+
+    <!-- overlay -->
+
+    <div class="fixed inset-0 hidden bg-base-300/75" id="overlay"></div>
+    <div class="w-9/12 md:w-3/6 lg:w-7/12 xl:w-4/12">
+    
+      <div class="w-full text-center">
+        <figure>
+          <img
+            id="author_avatar"
+            class="object-cover w-40 h-40 mx-auto duration-500 ease-in-out rounded-full cursor-pointer md:w-80 md:h-80"
+            src="/{{author.avatar}}"
+            alt="author profile avatar"
+          />
+        </figure>
+        <p class="mt-4 text-4xl rounded-full">@{{author}}</p>
+
+
+        <div class="my-3 text-gray-400">
+            this is some bio text
+        </div>
+    
+        <div class="h-0.5 bg-gray-700 mt-4 w-full"></div>
+
+        <div class="grid flex-1 grid-cols-5 grid-rows-1 my-5 my-8 gap-x-3 bg-base-200/25 px-7 py-14 rounded-3xl">
+          <div class="flex flex-col items-center text-xl">
+            <span class="badge badge-primary mb-7">followers</span>
+            <FaUsers class="mx-auto my-2 text-5xl" />
+            <p>55</p>
+          </div>
+          <div class="mx-auto divider divider-vertical"></div>
+          <div class="flex flex-col items-center text-xl">
+            <span class="badge badge-secondary mb-7">following</span>
+            <FaUsers class="mx-auto my-2 text-5xl" />
+            <p>4</p>
+          </div>
+          <div class="mx-auto divider divider-vertical"></div>
+
+          <div class="flex flex-col items-center text-xl">
+            <span class="badge badge-info mb-7">Articles</span>
+            <FaCodepen class="mx-auto my-2 text-5xl" />
+            <p>{{author_articles.count}}</p>
+          </div>
+        </div>
+
+      
+      </div>
+    </div>
+  
+    <!-- articles -->
+    <h1 class="my-4 font-mono text-5xl font-bold text-center">Articles</h1>
+    <div class="my-4 divider"></div>
+    
+
+
+
+
+  </div>
+
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+    {% for a in author_articles.all %}
+    <a href="/articles/{{a}}" class="duration-300 ease-in-out shadow-md card card-compact bg-base-100 hover:shadow-xl">
+        <figure>
+            <img src="/{{a.cover}}" alt="article cover" class="object-cover w-full h-96" />
+        </figure>
+        <div class="bg-base-300 card-body">
+          <h2 class="card-title">{{a.title}}</h2>
+          <div class="justify-between card-actions">
+            <span>{{a.date_published}}</span>
+          </div>
+   
+        </div>
+      </a>
+      {% endfor %}
+</div>
+{% endblock %}
+{% block 'scripts' %}
+<script>
+$('#author_avatar').on('click' , (e) => {
+    e.target.classList.add('avatar-active')
+    $('#overlay').removeClass('hidden')
+})
+$('#overlay').on('click' , (e) => {
+    $('#author_avatar').removeClass('avatar-active')
+    $('#overlay').addClass('hidden')
+})
+</script>
+{% endblock %}

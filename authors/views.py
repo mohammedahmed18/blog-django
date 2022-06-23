@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from django.contrib import auth
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 
 
@@ -39,4 +40,17 @@ def login(req):
         except ObjectDoesNotExist as e :
             return render(req,'authors/login.html',{'error' : 'username or password is incorrect'})
 
-   
+
+
+def author_profile(req , username):
+    try: 
+        author_username = username.replace('-' , ' ')
+        author = Author.objects.get(username = author_username)
+        author_articles = author.articles
+        context = {
+            'author' : author,
+            'author_articles' : author_articles
+        }
+        return render(req , 'authors/authorprofile.html' ,context)
+    except ObjectDoesNotExist:
+        raise Http404

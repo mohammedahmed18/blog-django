@@ -14,9 +14,10 @@
 		<!-- dropify -->
 		<link rel="stylesheet" href="{% static '/assets/css/dropify.min.css'%}" type="text/css"/>
 
-		
+	
 		{% tailwind_css %}
-
+		{% block 'styles' %}
+		{% endblock %}
 	</head>
 
 	<body>

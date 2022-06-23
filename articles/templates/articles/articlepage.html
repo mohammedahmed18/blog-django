@@ -17,13 +17,13 @@
     <div class="flex flex-col justify-center">
     <div class="avatar">
         <div class="w-24 mask mask-hexagon">
-            <img src="/{{article.author.avatar}}" />
+            <img src="/{{author.avatar}}" alt="author avatar"/>
         </div>
     </div>
-    {%if article.author == user%}
-    <span class="ml-6 font-bold">@you</span>
+    {%if author == user%}
+    <span class="mt-5 ml-3 font-bold ">@you</span>
     {%else%}
-    <span class="ml-6 font-bold">@{{article.author}}</span>
+    <a href="{% url 'author_profile' author_username %}" class="mt-5 ml-3 font-bold hover:text-primary">@{{author}}</a>
     {%endif%}
 </div>
     
@@ -47,16 +47,20 @@
         $('#markdown a').addClass('link text-blue-500 ')
         $('#markdown a').attr('target' , '_blank')
         
-        $('#markdown h1').addClass('font-bold my-4 text-4xl')
-        $('#markdown h2').addClass('font-bold my-4 text-3xl')
         // code
         $('#markdown pre').addClass('p-4 bg-base-300 my-3 mx-2 rounded-md shadow-md')
-        // $('#markdown code').addClass('language-json')
+
+
+        $('#markdown h1').addClass('text-6xl')
+        $('#markdown h2').addClass('text-5xl')
+        $('#markdown h3').addClass('text-4xl')
+        $('#markdown h4').addClass('text-3xl')
+        $('#markdown h5').addClass('text-2xl')
+        $('#markdown h6').addClass('text-lg')
         
         
-        $('#markdown h3').addClass('font-bold my-4 text-3xl')
-        $('#markdown h4').addClass('font-bold my-4 text-2xl')
-        $('#markdown h5').addClass('font-bold my-4 text-lg')
+        $('#markdown :header').addClass('font-bold border-b-[1px] border-gray-400 mt-3 mb-5 py-4')
+
         $('#markdown blockquote').addClass('border-l-2 p-3 bg-base-100')
 
 

@@ -35,7 +35,7 @@
 
 </form>
 <!-- preview  -->
-<div class="w-full py-3 overflow-auto rounded-lg lg:w-1/2 bg-base-300/50">
+<div class="w-full py-3 overflow-auto rounded-lg mt-7 lg:mt-0 lg:w-1/2 bg-base-300/50">
     <h1 class="text-2xl font-bold text-center">Preview</h1>
     <div class="mt-2 mb-4 divider"></div>
     {% load static %}
@@ -82,19 +82,24 @@
 
     const putClasses = () => {
 
-$('#markdown-preview a').addClass('link text-blue-500 ')
-$('#markdown-preview a').attr('target' , '_blank')
-
-$('#markdown-preview h1').addClass('font-bold my-4 text-4xl')
-$('#markdown-preview h2').addClass('font-bold my-4 text-3xl')
-// code
-$('#markdown-preview pre').addClass('p-4 bg-base-300 my-3 mx-2 rounded-md shadow-md')
+        $('#markdown-preview a').addClass('link text-blue-500 ')
+        $('#markdown-preview a').attr('target' , '_blank')
+        
+        // code
+        $('#markdown-preview pre').addClass('p-4 bg-base-300 my-3 mx-2 rounded-md shadow-md')
 
 
-$('#markdown-preview h3').addClass('font-bold my-4 text-3xl')
-$('#markdown-preview h4').addClass('font-bold my-4 text-2xl')
-$('#markdown-preview h5').addClass('font-bold my-4 text-lg')
-$('#markdown-preview blockquote').addClass('border-l-2 p-3 bg-base-100')
+        $('#markdown-preview h1').addClass('text-6xl')
+        $('#markdown-preview h2').addClass('text-5xl')
+        $('#markdown-preview h3').addClass('text-4xl')
+        $('#markdown-preview h4').addClass('text-3xl')
+        $('#markdown-preview h5').addClass('text-2xl')
+        $('#markdown-preview h6').addClass('text-lg')
+        
+        
+        $('#markdown-preview :header').addClass('font-bold border-b-[1px] border-gray-400 mt-3 mb-5 py-4')
+
+        $('#markdown-preview blockquote').addClass('border-l-2 p-3 bg-base-100')
 
 }
     $('#markdown').on('input' , (e) => {
