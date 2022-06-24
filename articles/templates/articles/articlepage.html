@@ -11,14 +11,14 @@
     <h1 class="my-4 mb-10 text-6xl text-center">{{ article }}</h1>
     <div class="p-10">
 
-        <div class="flex flex-col justify-center">
-            <div class="avatar">
+        <div class="inline">
+            <div class="block avatar">
                 <div class="w-24 mask mask-hexagon">
                     <img src="/{{author.avatar}}" alt="author avatar"/>
                 </div>
             </div>
 
-            <a href="{% url 'author_profile' author_username %}" class="mt-5 ml-3 font-bold hover:text-primary">@{%if author == user%}you{%else%}{{author}}{%endif%}</a>
+            <a href="{% url 'author_profile' author_username %}" class="mt-5 ml-5 text-lg font-bold hover:text-primary">@{%if author == user%}you{%else%}{{author}}{%endif%}</a>
         </div>
         
         <div class="flex items-center my-2 mt-6 space-x-2">
@@ -80,7 +80,7 @@
         $('#markdown a').attr('target' , '_blank')
         
         // code
-        $('#markdown pre').wrap('<div class="mockup-code"></div>')
+        $('#markdown pre').wrap('<div class="my-4 mockup-code"></div>')
 
 
         $('#markdown h1').addClass('text-6xl')
@@ -102,10 +102,12 @@
 const getHtmlComment = (comment) => {
     return `
     <div class="flex px-2 py-4 mb-3 transition ease-in-out bg-base-100">
-        <div class="w-2/6">
-            <img class="object-cover object-center w-32 h-32 rounded-full" src="/${comment.author__avatar}" alt="avatar" />
-        </div> 
-        <div class="w-4/6 px-4">
+        <div class="block avatar">
+                <div class="w-20 mask mask-hexagon">
+                    <img src="/${comment.author__avatar}" alt="author avatar"/>
+                </div>
+        </div>
+        <div class="w-5/6 px-4">
             <a href="/author/${comment.author__username.replace(' ' , '-')}/profile" class="font-bold text-white">${comment.author__username}</a>
             <p class="w-full mt-1 text-2xl break-words">${comment.comment}</p>
         </div>
@@ -170,14 +172,15 @@ $('#comment_form').on('submit' , (e) => {
                 $('#comments-list').hide();
                 $('#comments-list').prepend(getHtmlComment(response))
                 $('#comments-list').slideToggle();
+
+                $('#comment_form textarea').val('')
+                $('#comment_form textarea').blur()
             },
             error: function (error) {
                 console.log(error);
             }
         })
 
-    $('#comment_form textarea').val('')
-    $('#comment_form textarea').blur()
 
 })
 </script>

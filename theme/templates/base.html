@@ -14,8 +14,41 @@
 		<!-- dropify -->
 		<link rel="stylesheet" href="{% static '/assets/css/dropify.min.css'%}" type="text/css"/>
 
-	
+		<!-- code highlight -->
 		{% tailwind_css %}
+
+		<style>
+		/* code highlighting */
+			.kd{
+				color: #ff7b72 !important;
+			}
+			.nx{
+				color : #a5d6ff
+			}
+			.s1 ,.s2{
+				color : rgb(220, 125, 37)
+			}
+			.s{
+				color : rgb(218, 224, 88)
+
+			}
+			.p , .mf , .mi{
+				color: #5caaf0;
+			}
+			.k {
+				color : orange
+			}
+
+			.nt{
+				color: #7ee787;
+			}
+			.na{
+				color: orange;
+			}
+			.o{
+				color: rgb(255, 142, 76);
+			}
+		</style>
 		{% block 'styles' %}
 		{% endblock %}
 	</head>

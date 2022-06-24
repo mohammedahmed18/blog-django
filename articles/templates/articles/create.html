@@ -7,12 +7,18 @@
 <h1 class="my-2 text-3xl font-bold">Write a new article <i class="fa fa-pen"></i></h1>
 <div class="my-4 divider"></div>
 
-<div class="flex flex-col h-screen lg:flex-row">
-<form id="article_form" class="w-full p-4 overflow-auto lg:w-1/2" method="POST" action="{% url 'article_add'%}" enctype="multipart/form-data">
+<div class="h-screen">
+<form id="article_form" class="w-full p-4 overflow-auto" method="POST" action="{% url 'article_add'%}" enctype="multipart/form-data">
     {% csrf_token %}
 
     {{ form.errors }}
-    <button type="submit" class="my-4 btn btn-secondary">Publish</button>
+    {%if error%}
+    <div class="alert alert-error">{{error}}</div>
+    {%endif%}
+    
+    <button type="submit" class="my-4 btn btn-lg btn-secondary">Publish</button>
+    <label for="modal-preview" id="preview-btn" class="btn btn-lg btn-info modal-button">Preview</label>
+
     
     <label class="my-2 input-group">
         <span class="w-40 bg-base-200">title</span>
@@ -31,22 +37,40 @@
 
     <label class="my-2 input-group">
         <span class="w-40 bg-base-200">Markdown</span>
-        {{ form.markdown |add_class:"textarea bg-base-300 w-full h-[700px]" |append_attr:"id:markdown"}}
+        {{ form.markdown |add_class:"textarea bg-base-300 w-full text-lg h-[700px]" |append_attr:"id:markdown"}}
     </label>
     <p class="mx-2 my-1 text-error" id="markdown-error"></p>
     
 
 
 </form>
-<!-- preview  -->
-<div class="w-full py-3 overflow-auto rounded-lg mt-7 lg:mt-0 lg:w-1/2 bg-base-300/50">
-    <h1 class="text-2xl font-bold text-center">Preview</h1>
-    <div class="mt-2 mb-4 divider"></div>
-    {% load static %}
-<img src="{% static '/defaults/cover.jpg'%}" class="object-cover w-full md:h-[400px] lg:h-[300px] sm:h-full" alt="preview" id="preview-cover">
-<h1 class="my-4 mb-10 text-4xl text-center break-words" id="title-preview"></h1>
-<div id="markdown-preview" class="p-5"></div>
-</div>
+
+
+
+
+  <input type="checkbox" id="modal-preview" class="modal-toggle" />
+  <div class="modal">
+    <div class="w-11/12 max-w-5xl modal-box">
+      <h3 class="text-lg font-bold">Preview</h3>
+      
+      <div class="modal-action">
+        <label for="modal-preview" id="close-preview" class="btn btn-error">close preview</label>
+      </div>
+      
+      <div class="w-full py-3 overflow-auto rounded-lg mt-7 bg-base-300/50">
+            <div class="mt-2 mb-4 divider"></div>
+            {% load static %}
+            <img src="{% static '/defaults/cover.jpg'%}" class="object-cover w-full md:h-[400px] lg:h-[300px] sm:h-full" alt="preview" id="preview-cover">
+            <h1 class="my-4 mb-10 text-4xl text-center break-words" id="title-preview"></h1>
+            <div id="markdown-preview" class="p-5"></div>
+        </div>
+
+
+    
+    </div>
+  </div>
+
+
 </div>
 
 {% endblock %}
@@ -80,9 +104,7 @@
             }
         });
 
-    $('#title').on('input' , (e) => {
-        $('#title-preview').text(e.target.value)
-    })
+  
 
     const putClasses = () => {
 
@@ -90,7 +112,7 @@
         $('#markdown-preview a').attr('target' , '_blank')
         
         // code
-        $('#markdown-preview pre').wrap('<div class="mockup-code"></div>')
+        $('#markdown-preview pre').wrap('<div class="my-4 mockup-code"></div>')
 
 
         $('#markdown-preview h1').addClass('text-6xl')
@@ -106,18 +128,32 @@
         $('#markdown-preview blockquote').addClass('border-l-2 p-3 bg-base-100')
 
 }
-    $('#markdown').on('input' , (e) => {
-        const html = converter.makeHtml(e.target.value)
-        $('#markdown-preview').html(html)
-        putClasses()
-    })
 
 
-function reload(){
-    var container = document.getElementById("markdown-preview");
-    var content = container.innerHTML;
-    container.innerHTML= content; 
-}
 
+
+$("#preview-btn").on('click' , (e) => {
+
+// put title preview
+$('#title-preview').text($('#title').val())
+
+// put cover
+
+
+// get markdown html
+$.ajax({
+            type: 'GET',
+            url: "{% url 'mark_it_down' %}",
+            data: {"markdown": $('#markdown').val()},
+            success: function (response) {
+                $('#markdown-preview').html(response.html)
+                putClasses()
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        })
+
+})
 </script>
 {% endblock %}

@@ -5,7 +5,7 @@ from .forms import ArticleForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
-
+from blog.templatetags.markdown_extras import markdown
 
 
 # Create your views here.
@@ -31,6 +31,9 @@ def add_article(req):
         if form.is_valid():
             article = form.save(commit=False)
             article.author = req.user
+            if '_' in article.title:
+                return render(req , 'articles/create.html' , {'form' : form , "error" : "article title can't contains underscores"})
+
             article.title = article.title.replace(' ' , '%_%')
             article.save()
             return redirect('/')
@@ -95,3 +98,14 @@ def post_comment(request):
 
     # some error occured
     return JsonResponse({"error": ""}, status=400)
+
+
+def mark_it_down(req):
+     # req should be ajax and method should be GET.
+    if req.is_ajax and req.method == "GET":
+        markdown_raw = req.GET.get("markdown", None)
+        html = markdown(markdown_raw)
+        return JsonResponse({'html' : html}, status = 200 , safe=False)
+
+        
+    return JsonResponse({}, status = 400)

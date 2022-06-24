@@ -64,8 +64,8 @@ class Author(AbstractBaseUser):
     
     objects = AuthorManager()
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email' , 'password']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username' , 'password']
     def __str__(self) -> str:
         return self.username
 

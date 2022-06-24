@@ -27,9 +27,9 @@ def login(req):
         return render(req,'authors/login.html')
     if req.method == 'POST':
         try:
-            username = req.POST.get('username')
+            email = req.POST.get('email')
             password = req.POST.get('password')
-            author = Author.objects.get(username = username)
+            author = Author.objects.get(email = email)
             # check for password
             password_correct = Author.check_password(author , password)
             if not password_correct:
