@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% block title %} {{author}} - profile {% endblock %}
+
 {% block 'styles' %}
 <style>
     .avatar-active{
@@ -79,12 +81,12 @@
 
   <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
     {% for a in author_articles.all %}
-    <a href="/articles/{{a}}" class="duration-300 ease-in-out shadow-md card card-compact bg-base-100 hover:shadow-xl">
+    <a  href="{% url 'article_page' a.url_string%}" class="duration-300 ease-in-out shadow-md card card-compact bg-base-100 hover:shadow-xl">
         <figure>
             <img src="/{{a.cover}}" alt="article cover" class="object-cover w-full h-96" />
         </figure>
         <div class="bg-base-300 card-body">
-          <h2 class="card-title">{{a.title}}</h2>
+          <h2 class="card-title">{{a}}</h2>
           <div class="justify-between card-actions">
             <span>{{a.date_published}}</span>
           </div>

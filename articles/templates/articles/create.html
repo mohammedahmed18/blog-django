@@ -8,7 +8,7 @@
 <div class="my-4 divider"></div>
 
 <div class="flex flex-col h-screen lg:flex-row">
-<form class="w-full p-4 overflow-auto lg:w-1/2" method="POST" action="{% url 'article_add'%}" enctype="multipart/form-data">
+<form id="article_form" class="w-full p-4 overflow-auto lg:w-1/2" method="POST" action="{% url 'article_add'%}" enctype="multipart/form-data">
     {% csrf_token %}
 
     {{ form.errors }}
@@ -18,6 +18,7 @@
         <span class="w-40 bg-base-200">title</span>
         {{ form.title |add_class:"input bg-base-300 w-full input-bordered" |append_attr:"id:title"}}
     </label>
+    <p class="mx-2 my-1 text-error" id="title-error"></p>
     
 
     <label class="my-2 input-group">
@@ -25,11 +26,14 @@
         {{ form.cover |add_class:"input bg-base-300 w-full input-bordered hidden" |append_attr:"id:cover"}}
         <span class="block w-full p-3 bg-base-300">upload cover</span>
     </label>
+    <p class="mx-2 my-1 text-error" id="cover-error"></p>
+
 
     <label class="my-2 input-group">
         <span class="w-40 bg-base-200">Markdown</span>
-        {{ form.markdown |add_class:"input bg-base-300 w-full input-bordered h-[400px]" |append_attr:"id:markdown"}}
+        {{ form.markdown |add_class:"textarea bg-base-300 w-full h-[700px]" |append_attr:"id:markdown"}}
     </label>
+    <p class="mx-2 my-1 text-error" id="markdown-error"></p>
     
 
 
@@ -86,7 +90,7 @@
         $('#markdown-preview a').attr('target' , '_blank')
         
         // code
-        $('#markdown-preview pre').addClass('p-4 bg-base-300 my-3 mx-2 rounded-md shadow-md')
+        $('#markdown-preview pre').wrap('<div class="mockup-code"></div>')
 
 
         $('#markdown-preview h1').addClass('text-6xl')

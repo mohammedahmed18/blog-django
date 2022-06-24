@@ -16,7 +16,10 @@ class Article(models.Model):
     likes = models.IntegerField(default = 0)
     cover = models.ImageField(upload_to=get_cover_image_path)
     def __str__(self) -> str:
-        return self.title.replace(' ' , '-')
+        return self.title.replace('%_%', ' ')
+
+    def url_string(self):
+        return self.title.replace('%_%' , '__')
 
 class Comment(models.Model):
     author = models.ForeignKey(Author , on_delete=models.CASCADE)

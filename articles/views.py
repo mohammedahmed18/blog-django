@@ -10,7 +10,7 @@ from django.core import serializers
 
 # Create your views here.
 def article_page(req , title):
-    article = Article.objects.get(title = title.replace('-' , ' '))
+    article = Article.objects.get(title = title.replace('__' , '%_%'))
     author = article.author
     author_username = author.username.replace(' ' , '-')
     comment_form = CommentForm()
@@ -31,6 +31,7 @@ def add_article(req):
         if form.is_valid():
             article = form.save(commit=False)
             article.author = req.user
+            article.title = article.title.replace(' ' , '%_%')
             article.save()
             return redirect('/')
     
