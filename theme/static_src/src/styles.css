@@ -23,3 +23,9 @@
     background: #380d82;
   }
   
+
+  ::selection {
+    color: white;
+    background: #2363a4;
+
+  }

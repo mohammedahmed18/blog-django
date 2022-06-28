@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
 
-{% block title %} create a new article {% endblock %}
+{% block title %} edit {{article}} {% endblock %}
 
 {% block 'content' %}
-<h1 class="my-2 text-3xl font-bold">Write a new article <i class="fa fa-pen"></i></h1>
+<h1 class="my-2 text-3xl font-bold">Edit "{{article}}" <i class="fa fa-pen"></i></h1>
 <div class="my-4 divider"></div>
 
 <div class="h-screen">
-<form id="article_form" class="w-full p-4 overflow-auto" method="POST" action="{% url 'article_add'%}" enctype="multipart/form-data">
+<form id="article_form" class="w-full p-4 overflow-auto" method="POST" action="{% url 'article_edit' article.url_string%}" enctype="multipart/form-data">
     {% csrf_token %}
 
     {{ form.errors }}
@@ -16,9 +16,10 @@
     <div class="alert alert-error">{{error}}</div>
     {%endif%}
     
-    <button type="submit" class="my-4 btn btn-lg btn-secondary">Publish</button>
+    <button type="submit" class="my-4 btn btn-lg btn-secondary">Update</button>
     <label for="modal-preview" id="preview-btn" class="btn btn-lg btn-info modal-button">Preview</label>
 
+    <input type="hidden" name="_method" value="put">
     
     <label class="my-2 input-group">
         <span class="w-40 bg-base-200">title</span>

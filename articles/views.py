@@ -39,7 +39,37 @@ def add_article(req):
             return redirect('/')
     
     return render(req , 'articles/create.html' , {'form' : form})
-    
+
+
+def auth_author(req,article):
+    if article.author != req.user:
+        return False
+    return True
+
+
+@login_required()
+def edit_article(request , title):
+    if request.method == 'GET':
+        article = Article.objects.get(title = title.replace('__' , '%_%'))
+        if not auth_author(request , article):
+            return JsonResponse({"msg" : "not authorized"},status = 401)
+        instance_article = article
+        instance_article.title = instance_article.title.replace('%_%' , ' ') 
+        form = ArticleForm(instance=instance_article)
+        return render(request , 'articles/edit.html' , {'form' : form , 'article' : article})
+    if request.method == 'POST' and request.POST.get('_method', '').lower() == 'put':
+        _article = Article.objects.get(title = title.replace(' ' , '%_%'))
+        if not auth_author(request , _article):
+            return JsonResponse({"msg" : "not authorized"},status = 401)
+        form = ArticleForm(request.POST,request.FILES ,instance=_article)
+        article = form.save(commit=False)
+        article.author = request.user
+        if '_' in article.title:
+            return render(request , 'articles/edit.html' , {'form' : form , "error" : "article title can't contains underscores"})
+
+        article.title = article.title.replace(' ' , '%_%')
+        article.save()
+        return redirect('article_page',title=_article.url_string())
 
 def get_article_comments(req):
      # req should be ajax and method should be GET.
@@ -50,7 +80,6 @@ def get_article_comments(req):
             article = Article.objects.get(title = article_title)
             # article is found
             
-            
             # comments = []
             # for comment in article.comments.all():
             #     comments.append({
@@ -60,7 +89,6 @@ def get_article_comments(req):
             #             'avatar' : str(comment.get_avatar()) 
             #         }
             #     })
-
 
             comments =article.comments.order_by('-pk')
             data = comments.values(
@@ -99,7 +127,7 @@ def post_comment(request):
     # some error occured
     return JsonResponse({"error": ""}, status=400)
 
-
+@login_required()
 def mark_it_down(req):
      # req should be ajax and method should be GET.
     if req.is_ajax and req.method == "GET":
@@ -109,3 +137,6 @@ def mark_it_down(req):
 
         
     return JsonResponse({}, status = 400)
+
+
+

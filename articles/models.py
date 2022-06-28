@@ -1,10 +1,10 @@
 import zlib
 from django.db import models
 from authors.models import Author
-# Create your models here.
+from .storage import OverwriteStorage
 
 def get_cover_image_path(self, article=None):
-    return f'static/articles/{self}/cover.png'
+    return f'static/articles/{self.pk}/cover.png'
 
 
 
@@ -14,7 +14,7 @@ class Article(models.Model):
     date_published = models.DateField(auto_now_add = True)
     markdown = models.TextField()
     likes = models.IntegerField(default = 0)
-    cover = models.ImageField(upload_to=get_cover_image_path)
+    cover = models.ImageField(upload_to=get_cover_image_path,storage=OverwriteStorage())
     def __str__(self) -> str:
         return self.title.replace('%_%', ' ')
 

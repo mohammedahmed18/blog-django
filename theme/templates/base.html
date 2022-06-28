@@ -2,7 +2,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 	<head>
     <title>{% block title %} blog {% endblock %}</title>
 	
@@ -19,7 +19,7 @@
 
 		<style>
 		/* code highlighting */
-			.kd{
+			.kd , .nn , .nd , .nc , .fm{
 				color: #ff7b72 !important;
 			}
 			.nx{
@@ -28,14 +28,17 @@
 			.s1 ,.s2{
 				color : rgb(220, 125, 37)
 			}
-			.s{
-				color : rgb(218, 224, 88)
+			.s , .gp {
+				color : rgb(220, 191, 62)
 
 			}
-			.p , .mf , .mi{
-				color: #5caaf0;
+			.p , .mf {
+				color: #c9c047;
 			}
-			.k {
+			.mi , .n , .nf , .bp{
+				color: #5cbff0;
+			}
+			.k , .kn  {
 				color : orange
 			}
 
@@ -48,6 +51,9 @@
 			.o{
 				color: rgb(255, 142, 76);
 			}
+			.c1{
+				color: rgb(122, 122, 122);
+			}
 		</style>
 		{% block 'styles' %}
 		{% endblock %}
@@ -57,18 +63,53 @@
 		<!-- navbar -->
 		{% include "inc/navbar.html" %}
 		<!-- content -->
-		<div class="p-5 pt-20">
+		<div class="p-5 pt-20 flex-1 overflow-y-auto">
 			{% block 'content' %}
 			{% endblock %}
 		</div>
 
+
+		<!-- scripts -->
 		<script src="{% static '/assets/js/jquery.js'%}"></script>
 		<script src="{% static '/assets/js/all.min.js'%}"></script>
-		<script src="{% static '/assets/js/dropify.min.js'%}"></script>
-		<script src="{% static '/assets/js/jqueryvalidate.js'%}"></script>
 		
+		<script src="{% static '/assets/js/three.js'%}"></script>
+	
+		<script>
+
+			// get theme from local storage
+			const theme = localStorage.getItem('theme')
+			if(theme){
+					$('html').attr('data-theme' , theme)
+					if(theme == 'light'){
+						$('#sun-icon').removeClass('swap-off').addClass('swap-on')
+						$('#moon-icon').removeClass('swap-on').addClass('swap-off')
+
+					}else{
+						$('#moon-icon').removeClass('swap-off').addClass('swap-on')
+						$('#sun-icon').removeClass('swap-on').addClass('swap-off')
+					}
+			}
+
+
+			const handleSwapTheme = () => {
+				const current_theme = $('html').attr('data-theme') 
+				if(current_theme == 'light'){
+					$('html').attr('data-theme' , 'dark')
+					// store dark
+					localStorage.setItem('theme' , 'dark')
+					
+
+				}else{
+					$('html').attr('data-theme' , 'light')
+					// store light
+					localStorage.setItem('theme' , 'light')
+					
+				}
+			}
+		</script>
 		{% block 'scripts' %}
 		{% endblock %}
-
+		
 	</body>
 </html>
